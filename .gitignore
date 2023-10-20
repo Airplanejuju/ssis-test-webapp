@@ -190,19 +190,4 @@ cython_debug/
 pyvenv.cfg
 pip-selfcheck.json
 
-### Web ###
-*.asp
-*.cer
-*.csr
-*.css
-*.htm
-*.html
-*.js
-*.jsp
-*.php
-*.rss
-*.wasm
-*.wat
-*.xhtml
-
 # End of https://www.toptal.com/developers/gitignore/api/flask,web,virtualenv,database
