@@ -1,0 +1,32 @@
+<!-- search_results.html -->
+
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Search Results</h1>
+
+    {% if results %}
+        {% for table, data in results.items() %}
+            <h2>{{ table }}</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        {% for column in data[0] %}
+                            <th>{{ column }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for row in data %}
+                        <tr>
+                            {% for value in row %}
+                                <td>{{ value }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    {% else %}
+        <p>No search results found.</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,117 @@
+{% extends "layout.html" %}
+{% block content %}
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+<br>
+<h2 class="ml-2 mr-2 mb-3 d-flex justify-content-between align-items-center">Course Information
+    <div class="dropdown">
+        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+        <i class="fa fa-eye"></i> View
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" href="/student">Student Table</a></li>
+          <li><a class="dropdown-item active" href="#">Course Table</a></li>
+          <li><a class="dropdown-item" href="/college">College Table</a></li>
+        </ul>
+    </div>
+</h2>
+
+<div class="card ml-2 mr-2">
+    <div class="card-body table-responsive">
+        <form class="mb-2 d-flex">
+            <input class="form-control me-2 mr-1" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-dark" type="submit"><i class="fa fa-search"></i></button>
+        </form>
+        <table class="table table-hover" style="text-align: center;">
+            <thead class="table-secondary">
+                <tr style="font-family: sans-serif;">
+                    <th>Code</th>
+                    <th>Name</th>
+                    <th>College</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for course in data %}
+                    <tr>
+                        <td>{{ course.code }}</td>
+                        <td>{{ course.name }}</td>
+                        <td>{{ course.college }}</td>
+                        <td>
+                            <button class="btn btn-warning edit-btn" data-bs-toggle="modal" data-bs-target="#courseEditModal"
+                            data-course-code="{{ course.code }}" data-course-name="{{ course.name }}"
+                            data-course-college="{{ course.college }}"><i class="fa fa-pencil"></i> | Edit</button>
+                            <button class="btn btn-danger delete-btn" data-course-code="{{ course.code }}"><i class="fa fa-trash"></i> | Delete</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+<br>
+<div class="mr-2 d-flex justify-content-end">
+    <button type="button" class="btn btn-success" style="border: none;" data-bs-toggle="modal" data-bs-target="#courseModal">
+        <i class="fa fa-plus"></i>  Add Course
+    </button>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script>
+    $('.edit-btn').click(function() {
+    // Capture data attributes
+    var courseCode = $(this).data('course-code');
+    var courseName = $(this).data('course-name');
+    var courseCollege = $(this).data('course-college');
+
+    // If you want to update a form field
+    $('#courseCode').val(courseCode);
+    $('#courseName').val(courseName);
+    $('#courseCollege').val(courseCollege);
+
+    // Open the modal if needed
+    $('#courseEditModal').modal('show');
+    });
+
+    $('.delete-btn').click(function() {
+    // Capture data attributes
+    var courseCode = $(this).data('course-code');
+
+    // Confirm deletion with user if needed
+    var confirmDelete = confirm(`Are you sure you want to delete ${courseCode}?`);
+    
+    if (confirmDelete) {
+        // Make an AJAX request to delete the item
+        $.ajax({
+            type: 'POST',
+            url: '/delete',  
+            data: { 'courseCode': courseCode },
+            success: function(response) {
+                // Handle success, e.g., remove the corresponding row from the table
+                console.log(response);
+
+                location.reload();
+            },
+            error: function(error) {
+                // Handle error
+                console.error(error);
+            }
+        });
+    }
+    });
+</script>
+
+<!-- Course Modal here -->
+{% include 'modal/course-m.html' %}
+{% include 'modal/course-me.html' %}
+
+{% endblock %}
