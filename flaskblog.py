@@ -1,5 +1,6 @@
-from flask import Flask, render_template
-from mysql.connector import connect, Error
+from flask import Flask, render_template, redirect, url_for, request, flash
+from form import StudentForm
+from db_utils import query_database, submit_form
 from dotenv import load_dotenv
 import os
 
@@ -7,42 +8,32 @@ load_dotenv()  # Load environment variables from .env file
 
 app = Flask(__name__)
 
-# Database Configuration
-db_config = {
-    'host': os.environ['DB_HOST'],
-    'port': os.environ['DB_PORT'],
-    'user': os.environ['DB_USERNAME'],
-    'password': os.environ['DB_PASSWORD'],
-    'database': os.environ['DB_NAME'],
-}
+# Set the secret key for CSRF protection
+app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'default_secret_key')
 
-# Function to create a database connection
-def create_connection():
-    connection = connect(**db_config)
-    return connection
 
-# Function to query the database
-def query_database(tablename):
+@app.route('/')
+def form():
+    form = StudentForm()
+    return render_template('studentform.html', form=form)
 
-    # Create a connection
-    connection = create_connection()
-
-    # Query the database
-    if connection:
+@app.route('/submit_form', methods=['POST'])
+def submit():
+    if request.method == 'POST':
         try:
-            query = f"SELECT * FROM {tablename}"
-            cursor = connection.cursor(dictionary=True)
-            cursor.execute(query)
-            data = cursor.fetchall()
-            return data
-        except Error as e:
-            print(f"Error executing query: {e}")
-        finally:
-            connection.close()
-    return None
+            submit_form()
+
+            # Flash a success message
+            flash('Submitted successfully!', 'success')
+        except Exception as e:
+            # Flash an error message
+            flash(f'Submission failed: {str(e)}', 'danger')
+
+        # Redirect to the form page
+        return redirect(url_for('form'))
 
 # Example route to query the database
-@app.route('/')
+@app.route('/student')
 def student():
     data = query_database('tblstudent')
     return render_template('db/student.html', data=data)
@@ -59,6 +50,5 @@ def college():
 
 
 # Other Flask configurations and routes go here
-
 if __name__ == '__main__':
     app.run()
