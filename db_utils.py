@@ -527,9 +527,9 @@ def queryfull_database(tablename, columns, keyword):
 def search_form(keyword):
     tables = ['tblcourse', 'tblcollege', 'tblstudent']
     columns = {
-        'tblcourse': ['course_code', 'course_name'],
-        'tblcollege': ['college_code', 'college_name'],
-        'tblstudent': ['student_id', 'first_name', 'last_name', 'course', 'year', 'gender']
+        'tblcourse': ['code', 'name'],
+        'tblcollege': ['code', 'name'],
+        'tblstudent': ['id', 'firstName', 'lastName', 'course', 'year', 'gender']
     }
     results = {}
     for table in tables:

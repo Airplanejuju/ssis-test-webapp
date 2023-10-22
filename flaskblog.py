@@ -64,7 +64,7 @@ def delete():
 @app.route('/search', methods=['POST'])
 def search():
     search_query = request.form.get('search-query', '').lower()
-
+    #print(f"Received search query: {search_query}")
     # If the search query is empty, return the full data
     if not search_query:
         return render_template('search_results.html', results=None)
@@ -72,7 +72,7 @@ def search():
     # Perform search logic based on the query
     search_results = search_form(search_query)
 
-    print(search_results)
+    #print(search_results)
 
     return render_template('search_results.html', results=search_results)
 

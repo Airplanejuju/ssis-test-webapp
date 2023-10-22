@@ -129,7 +129,31 @@
     }
     });
 
+    $(document).ready(function() {
+        $('#searchForm').submit(function(e) {
+            e.preventDefault();
 
+            var searchQuery = $('#searchInput').val();
+
+            $.ajax({
+                type: 'POST',
+                url: '/search',
+                data: { 'search-query': searchQuery },
+                success: function(response) {
+                    // Clear existing content
+                    $('#tblstudent tbody').empty();
+                    // Update your table with the search results
+                    $('#tblstudent tbody').html(response);
+                },
+                error: function(error) {
+                    // Handle error
+                    console.error(error);
+                }
+            });
+
+        
+        });
+    });
 
 </script>
 
