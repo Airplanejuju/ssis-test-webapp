@@ -28,8 +28,8 @@
 <div class="card ml-2 mr-2">
     <div class="card-body table-responsive">
         <form class="mb-2 d-flex">
-            <input class="form-control me-2 mr-1" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-dark" type="submit"><i class="fa fa-search"></i></button>
+            <input id="searchInput" class="form-control me-2 mr-1" type="search" placeholder="Search" aria-label="Search">
+            <button id="searchButton" class="btn btn-outline-dark search-btn" data-bs-toggle="modal" data-bs-target="#resultsModal"><i class="fa fa-search"></i></button>
         </form>
         <table class="table table-hover" style="text-align: center;">
             <thead class="table-secondary">
@@ -106,10 +106,40 @@
         });
     }
     });
+
+    $(document).ready(function() {
+    $(document).on('click', '.search-btn', function() {
+        // Get the search query from the input field
+        var searchQuery = $('#searchInput').val();
+
+        // Make an AJAX request to the server
+        $.ajax({
+            type: 'POST',
+            url: '/search',
+            data: { 'search-query': searchQuery },
+            success: function(response) {
+                // Update the content inside the modal with the search results
+                $('#resultsModal .modal-body').html(response);
+
+                // Open the modal
+                $('#resultsModal').modal('show');
+            },
+            error: function(error) {
+                console.error(error);
+            }
+        });
+
+        // Prevent the default form submission
+        return false;
+    });
+});
+
 </script>
 
 <!-- College Modal here -->
 {% include 'modal/college-m.html' %}
 {% include 'modal/college-me.html' %}
+
+{% include 'modal/searchRe.html' %}
 
 {% endblock %}

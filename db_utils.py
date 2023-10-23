@@ -527,7 +527,7 @@ def queryfull_database(tablename, columns, keyword):
 def search_form(keyword):
     tables = ['tblcourse', 'tblcollege', 'tblstudent']
     columns = {
-        'tblcourse': ['code', 'name'],
+        'tblcourse': ['code', 'name', 'college'],
         'tblcollege': ['code', 'name'],
         'tblstudent': ['id', 'firstName', 'lastName', 'course', 'year', 'gender']
     }
@@ -536,4 +536,5 @@ def search_form(keyword):
         result = queryfull_database(table, columns[table], keyword)
         if result:
             results[table] = result
+    print(f"Search results for '{keyword}': {results}")
     return results

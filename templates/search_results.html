@@ -1,20 +1,30 @@
 <!-- search_results.html -->
-{% block content %}
-    {% if results %}
-        {% for table, data in results.items() %}
-            <table class="table">
-                <tbody>
-                    {% for row in data %}
-                        <tr>
-                            {% for value in row %}
-                                <td>{{ value }}</td>
-                            {% endfor %}
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endfor %}
-    {% else %}
-        <p>No search results found.</p>
-    {% endif %}
-{% endblock %}
+<div class="card ml-2 mr-2">
+    <div class="card-body"> 
+        <form  method="POST" action="{{ url_for('search') }}">
+            {% if results %}
+            {% for table, data in results.items() %}
+                <table class="table">
+                    <thead>
+                        <th>
+                            For: {{table}}
+                        </th>
+                    </thead>
+                    <tbody>
+                        {% for row in data %}
+                            <tr>
+                                {% for value in row %}
+                                    <td>{{ value }}</td>
+                                {% endfor %}
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% endfor %}
+            {% else %}
+            <p>No search results found.</p>
+            {% endif %}
+        </form>
+    </div>
+</div>
+    

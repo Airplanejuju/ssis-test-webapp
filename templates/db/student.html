@@ -29,9 +29,9 @@
 
     <div class="card ml-2 mr-2">
         <div class="card-body table-responsive">
-            <form id="searchForm" class="mb-2 d-flex" method="POST" action="{{ url_for('search') }}">
+            <form id="searchForm" class="mb-2 d-flex">
                 <input id="searchInput" class="form-control me-2 mr-1" type="search" placeholder="Search" aria-label="Search">
-                <button id="searchButton" class="btn btn-outline-dark" type="submit"><i class="fa fa-search"></i></button>
+                <button id="searchButton" class="btn btn-outline-dark search-btn" data-bs-toggle="modal" data-bs-target="#resultsModal"><i class="fa fa-search"></i></button>
             </form>
             <table id="tblstudent" class="table table-hover" style="text-align: center;">
                 <thead class="table-secondary">
@@ -130,30 +130,33 @@
     });
 
     $(document).ready(function() {
-        $('#searchForm').submit(function(e) {
-            e.preventDefault();
+    $(document).on('click', '.search-btn', function() {
+        // Get the search query from the input field
+        var searchQuery = $('#searchInput').val();
 
-            var searchQuery = $('#searchInput').val();
+        // Make an AJAX request to the server
+        $.ajax({
+            type: 'POST',
+            url: '/search',
+            data: { 'search-query': searchQuery },
+            success: function(response) {
+                // Update the content inside the modal with the search results
+                $('#resultsModal .modal-body').html(response);
 
-            $.ajax({
-                type: 'POST',
-                url: '/search',
-                data: { 'search-query': searchQuery },
-                success: function(response) {
-                    // Clear existing content
-                    $('#tblstudent tbody').empty();
-                    // Update your table with the search results
-                    $('#tblstudent tbody').html(response);
-                },
-                error: function(error) {
-                    // Handle error
-                    console.error(error);
-                }
-            });
-
-        
+                // Open the modal
+                $('#resultsModal').modal('show');
+            },
+            error: function(error) {
+                console.error(error);
+            }
         });
+
+        // Prevent the default form submission
+        return false;
     });
+});
+
+
 
 </script>
 
@@ -161,5 +164,6 @@
 {% include 'modal/student-m.html' %}
 {% include 'modal/student-me.html' %}
 
+{% include 'modal/searchRe.html' %}
 
 {% endblock %}
