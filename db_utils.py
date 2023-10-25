@@ -188,6 +188,8 @@ def generate_course(course):
         'BSIS': 'Bachelor of Science in Information System'
     }
 
+    return course_codes.get(course, 'COURSE')  # Default to 'COURSE' if not found
+
 # Function to generate college code based on the course code
 def gencode_college_course(course):
     college_codes = {
@@ -246,6 +248,8 @@ def gencode_college_course(course):
         'BSIT': 'CCS',
         'BSIS': 'CCS'
     }
+
+    return college_codes.get(course, 'COL')  # Default to 'COL' if not found
 
 
 def record_exists(table, field, value):
@@ -407,7 +411,14 @@ def edit_form():
                         # Flash a message
                         flash(f'Updated into tblstudent: {student_query % (firstName, lastName, course, year, gender, id)} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>', 'info')
                     if not record_exists('tblcourse', 'code', course):
+                        print(f"Course: {course}")
+
                         collegeCode = gencode_college_course(course)
+                        print(f"Received: {collegeCode}")
+
+                        name =  generate_course(course)
+                        print(f"Name Received: {name}")
+            
                         if record_exists('tblcollege', 'code', collegeCode):
                             # Insert into tblcourse
                             course_query = "INSERT INTO tblcourse (code, name, college) VALUES (%s, %s, %s)"
