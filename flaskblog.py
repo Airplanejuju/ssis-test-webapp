@@ -65,20 +65,22 @@ def delete():
 def search():
     search_query = request.form.get('search-query', '').lower()
     table_id = request.form.get('table-id', '')
-    
-    print(f"Received search query: {search_query} for table {table_id}")
 
-    # If the search query is empty, return the full data
-    if not search_query:
-        return render_template('search_results.html', results=None)
+    print(f"Received search query: {search_query} for table {table_id}")
 
     # Perform search logic based on the query
     search_results = search_form(search_query, table_id)
 
     #print(search_results)
     print(f"Final search results: {search_results}")
-    return render_template('search_results.html', results=search_results)
 
+    if table_id == "tblstudent":
+        return render_template('form/student-fs.html', results=search_results, form=StudentForm())
+    if table_id == "tblcourse":
+        return render_template('form/course-fs.html', results=search_results, form=CourseForm())
+    if table_id == "tblcollege":
+        return render_template('form/college-fs.html', results=search_results, form=CollegeForm())
+    
 # Example route to query the database
 @app.route('/student')
 def student():
