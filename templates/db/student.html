@@ -31,7 +31,7 @@
         <div class="card-body table-responsive">
             <form id="searchForm" class="mb-2 d-flex">
                 <input id="searchInput" class="form-control me-2 mr-1" type="search" placeholder="Search" aria-label="Search">
-                <button id="searchButton" class="btn btn-outline-dark search-btn" data-table-id="tblstudent" data-bs-toggle="modal" data-bs-target="#resultsModal"><i class="fa fa-search"></i></button>
+                <button id="searchButton" class="btn btn-outline-dark search-btn" data-table-id="tblstudent"><i class="fa fa-search"></i></button>
             </form>
             <table id="tblstudent" class="table table-hover" style="text-align: center;">
                 <thead class="table-secondary">
@@ -45,28 +45,33 @@
                         <th>Action</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {% for student in data %}
-                    <tr>
-                        <td>{{ student.id }}</td>
-                        <td>{{ student.firstName }}</td>
-                        <td>{{ student.lastName }}</td>
-                        <td>{{ student.course }}</td>
-                        <td>{{ student.year }}</td>
-                        <td>{{ student.gender }}</td>
-                        <td>
-                            <button class="btn btn-warning edit-btn" data-bs-toggle="modal" data-bs-target="#studentEditModal"
-                            data-student-id="{{ student.id }}" data-student-firstname="{{ student.firstName }}"
-                            data-student-lastname="{{ student.lastName }}" data-student-course="{{ student.course }}"
-                            data-student-year="{{ student.year }}" data-student-gender="{{ student.gender }}">
-                            <i class="fa fa-pencil"></i> | Edit</button>
-                            <button class="btn btn-danger delete-btn" data-student-id="{{ student.id }}"><i class="fa fa-trash"></i> | Delete</button>
-                        </td>
-                    </tr>
-                    {% endfor %}
+                <tbody id="student_tbody">
+                    {% if data %}
+                        {% for student in data %}
+                            <tr>
+                                <td>{{ student.id }}</td>
+                                <td>{{ student.firstName }}</td>
+                                <td>{{ student.lastName }}</td>
+                                <td>{{ student.course }}</td>
+                                <td>{{ student.year }}</td>
+                                <td>{{ student.gender }}</td>
+                                <td>
+                                    <button class="btn btn-warning edit-btn" data-bs-toggle="modal" data-bs-target="#studentEditModal"
+                                    data-student-id="{{ student.id }}" data-student-firstname="{{ student.firstName }}"
+                                    data-student-lastname="{{ student.lastName }}" data-student-course="{{ student.course }}"
+                                    data-student-year="{{ student.year }}" data-student-gender="{{ student.gender }}">
+                                    <i class="fa fa-pencil"></i> | Edit</button>
+                                    <button class="btn btn-danger delete-btn" data-student-id="{{ student.id }}"><i class="fa fa-trash"></i> | Delete</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7">No results found</td>
+                        </tr>
+                    {% endif %}
                 </tbody>
             </table>
-        
         </div>
     </div>
 
@@ -81,92 +86,100 @@
 
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script>
-    $('.edit-btn').click(function() {
-    // Capture data attributes
-    var studentId = $(this).data('student-id');
-    var studentFirstname = $(this).data('student-firstname');
-    var studentLastname = $(this).data('student-lastname');
-    var studentCourse = $(this).data('student-course');
-    var studentYear = $(this).data('student-year');
-    var studentGender = $(this).data('student-gender');
+    $(document).on('click', '.edit-btn', function(){
+        // Capture data attributes
+        var studentId = $(this).data('student-id');
+        var studentFirstname = $(this).data('student-firstname');
+        var studentLastname = $(this).data('student-lastname');
+        var studentCourse = $(this).data('student-course');
+        var studentYear = $(this).data('student-year');
+        var studentGender = $(this).data('student-gender');
 
-    // If you want to update a form field
-    $('#studentId').val(studentId);
-    $('#studentFirstname').val(studentFirstname);
-    $('#studentLastname').val(studentLastname);
-    $('#studentCourse').val(studentCourse);
-    $('#studentYear').val(studentYear);
-    $('#studentGender').val(studentGender);
+        // If you want to update a form field
+        $('#studentId').val(studentId);
+        $('#studentFirstname').val(studentFirstname);
+        $('#studentLastname').val(studentLastname);
+        $('#studentCourse').val(studentCourse);
+        $('#studentYear').val(studentYear);
+        $('#studentGender').val(studentGender);
 
-    // Open the modal if needed
-    $('#studentEditModal').modal('show');
+        // Print values to check
+        console.log("ID:", studentId);
+        console.log("First Name:", studentFirstname);
+        console.log("Last Name:", studentLastname);
+        console.log("Course:", studentCourse);
+        console.log("Year:", studentYear);
+        console.log("Gender:", studentGender);
+
+        // Open the modal if needed
+        $('#studentEditModal').modal('show');
     });
 
-    $('.delete-btn').click(function() {
-    // Capture data attributes
-    var studentId = $(this).data('student-id');
+    $(document).on('click', '.delete-btn', function() {
+        // Capture data attributes
+        var studentId = $(this).data('student-id');
 
-    // Confirm deletion with user if needed
-    var confirmDelete = confirm(`Are you sure you want to delete ${studentId}?`);
-    
-    if (confirmDelete) {
-        // Make an AJAX request to delete the item
-        $.ajax({
-            type: 'POST',
-            url: '/delete',  
-            data: { 'studentId': studentId },
-            success: function(response) {
-                // Handle success, e.g., remove the corresponding row from the table
-                console.log(response);
+        // Confirm deletion with user if needed
+        var confirmDelete = confirm(`Are you sure you want to delete ${studentId}?`);
 
-                location.reload();
-            },
-            error: function(error) {
-                // Handle error
-                console.error(error);
-            }
-        });
-    }
+        if (confirmDelete) {
+            // Make an AJAX request to delete the item
+            $.ajax({
+                type: 'POST',
+                url: '/delete',  
+                data: { 'studentId': studentId },
+                success: function(response) {
+                    // Handle success, e.g., remove the corresponding row from the table
+                    console.log(response);
+
+                    location.reload();
+                },
+                error: function(error) {
+                    // Handle error
+                    console.error(error);
+                }
+            });
+        }
     });
 
     $(document).ready(function() {
-    $(document).on('click', '.search-btn', function() {
-        // Get the search query from the input field
-        var searchQuery = $('#searchInput').val();
+        $(document).on('click', '#searchButton', function() {
+            // Get the search query from the input field
+            var searchQuery = $('#searchInput').val();
 
-        // Get the table ID from the data attribute
-        var tableId = $(this).data('table-id');
-
-        // Make an AJAX request to the server
-        $.ajax({
-            type: 'POST',
-            url: '/search',
-            data: { 'search-query': searchQuery, 'table-id': tableId },
-            success: function(response) {
-                // Update the content inside the modal with the search results
-                $('#resultsModal .modal-body').html(response);
-
-                // Open the modal
-                $('#resultsModal').modal('show');
-            },
-            error: function(error) {
-                console.error(error);
+             // Check if the search query is empty
+            if (searchQuery === "") {
+                // Reload the page if the search query is empty
+                location.reload();
+                return false;  // Prevent the default form submission
             }
+
+            // Get the table ID from the data attribute
+            var tableId = $(this).data('table-id');
+
+            // Make an AJAX request to the server
+            $.ajax({
+                type: 'POST',
+                url: '/search',
+                data: { 'search-query': searchQuery, 'table-id': tableId },
+                success: function(response) {
+                    // Update the content inside the tbody with the search results
+                    $('#student_tbody').html(response);
+                },
+                error: function(error) {
+                    console.error(error);
+                }
+            });
+
+            // Prevent the default form submission
+            return false;
         });
-
-        // Prevent the default form submission
-        return false;
     });
-});
-
-
 
 </script>
 
 <!-- Student Modal here -->
 {% include 'modal/student-m.html' %}
 {% include 'modal/student-me.html' %}
-
-{% include 'modal/searchRe.html' %}
 
 {% endblock %}
