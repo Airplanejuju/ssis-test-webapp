@@ -31,7 +31,7 @@
         <div class="card-body table-responsive">
             <form id="searchForm" class="mb-2 d-flex">
                 <input id="searchInput" class="form-control me-2 mr-1" type="search" placeholder="Search" aria-label="Search">
-                <button id="searchButton" class="btn btn-outline-dark search-btn" data-bs-toggle="modal" data-bs-target="#resultsModal"><i class="fa fa-search"></i></button>
+                <button id="searchButton" class="btn btn-outline-dark search-btn" data-table-id="tblstudent" data-bs-toggle="modal" data-bs-target="#resultsModal"><i class="fa fa-search"></i></button>
             </form>
             <table id="tblstudent" class="table table-hover" style="text-align: center;">
                 <thead class="table-secondary">
@@ -134,11 +134,14 @@
         // Get the search query from the input field
         var searchQuery = $('#searchInput').val();
 
+        // Get the table ID from the data attribute
+        var tableId = $(this).data('table-id');
+
         // Make an AJAX request to the server
         $.ajax({
             type: 'POST',
             url: '/search',
-            data: { 'search-query': searchQuery },
+            data: { 'search-query': searchQuery, 'table-id': tableId },
             success: function(response) {
                 // Update the content inside the modal with the search results
                 $('#resultsModal .modal-body').html(response);

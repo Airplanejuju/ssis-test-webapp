@@ -524,17 +524,19 @@ def queryfull_database(tablename, columns, keyword):
             connection.close()
 
 # Function to search for a keyword in the specified tables and columns
-def search_form(keyword):
-    tables = ['tblcourse', 'tblcollege', 'tblstudent']
-    columns = {
+def search_form(keyword, table_id):
+     # Define your tables and columns based on the received table ID
+    tables = {
         'tblcourse': ['code', 'name', 'college'],
         'tblcollege': ['code', 'name'],
         'tblstudent': ['id', 'firstName', 'lastName', 'course', 'year', 'gender']
     }
-    results = {}
-    for table in tables:
-        result = queryfull_database(table, columns[table], keyword)
+    results=  {}
+    if table_id in tables:
+        columns = tables[table_id]
+        result = queryfull_database(table_id, columns, keyword)
         if result:
-            results[table] = result
-    print(f"Search results for '{keyword}': {results}")
+            results[table_id] = result
+
+    print(f"Search results for '{keyword}' in table {table_id}: {results}")
     return results
