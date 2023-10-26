@@ -129,5 +129,12 @@
 
     // Initial update when the page loads
     updateCourseDropdown();
+
+    $(document).ready(function(){
+    // Set a timeout to fade out the alert after 3 seconds (adjust the duration as needed)
+    setTimeout(function(){
+        $('.alert').fadeOut('slow');
+    }, 3000);
+});
 </script>
 {% endblock %}
