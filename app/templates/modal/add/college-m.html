@@ -1,0 +1,30 @@
+<!-- College Modal -->
+<div class="modal fade" id="collegeModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Add College Form</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          {% include 'form/add/college-f.html' %}
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var editButtons = document.querySelectorAll('.edit-btn');
+
+        editButtons.forEach(function(button) {
+            button.addEventListener('click', function() {
+                var collegeCode = button.getAttribute('data-college-code');
+                document.getElementById('collegeCode').value = collegeCode;
+            });
+        });
+    });
+</script>

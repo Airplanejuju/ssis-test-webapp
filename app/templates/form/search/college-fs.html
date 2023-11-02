@@ -1,0 +1,24 @@
+<!-- college-fs.html -->
+{% if results %}
+    {% for table, data in results.items() %}
+        <table class="table">
+            <tbody>
+                {% for row in data %}
+                    <tr>
+                        {% for value in row %}
+                            <td>{{ value }}</td>
+                        {% endfor %}
+                        <td>
+                            <button class="btn btn-warning edit-btn" data-bs-toggle="modal" data-bs-target="#collegeEditModal"
+                            data-college-code="{{ row[0] }}" data-college-name="{{ row[1] }}">
+                            <i class="fa fa-pencil"></i> | Edit</button>
+                            <button class="btn btn-danger delete-btn" data-college-code="{{ row[0] }}"><i class="fa fa-trash"></i> | Delete</button>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endfor %}
+{% else %}
+    <p>No search results found.</p>
+{% endif %}
