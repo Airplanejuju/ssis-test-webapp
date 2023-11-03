@@ -8,7 +8,7 @@ course_bp = Blueprint(
     __name__,
 )
 
-@course_bp.route('/course')
+@course_bp.route('/')
 def course():
     data = query_database()
 
@@ -18,7 +18,7 @@ def course():
     form = CourseForm()
     return render_template('table/course.html', data=data, form=form)
 
-@course_bp.route('/course/add', methods=['POST'])
+@course_bp.route('/add', methods=['POST'])
 def add():
     if request.method == 'POST':
         try:
@@ -33,7 +33,7 @@ def add():
     
     return redirect(request.referrer)
 
-@course_bp.route('/course/update', methods=['POST'])
+@course_bp.route('/update', methods=['POST'])
 def update():
     if request.method == 'POST':
         try:
@@ -48,7 +48,7 @@ def update():
     
     return redirect(request.referrer)
 
-@course_bp.route('/course/delete', methods=['POST'])
+@course_bp.route('/delete', methods=['POST'])
 def delete():
     if request.method == 'POST':
         try:
@@ -63,7 +63,7 @@ def delete():
     
     return redirect(request.referrer)
 
-@course_bp.route('/course/search', methods=['POST'])
+@course_bp.route('/search', methods=['POST'])
 def search():
     search_query = request.form.get('search-query', '').lower()
 

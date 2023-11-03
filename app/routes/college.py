@@ -9,7 +9,7 @@ college_bp = Blueprint(
     __name__,
 )
 
-@college_bp.route('/college')
+@college_bp.route('/')
 def college():
     data = query_database()
 
@@ -19,7 +19,7 @@ def college():
     form = CollegeForm()
     return render_template('table/college.html', data=data, form=form)
 
-@college_bp.route('/college/add', methods=['POST'])
+@college_bp.route('/add', methods=['POST'])
 def add():
     if request.method == 'POST':
         try:
@@ -34,7 +34,7 @@ def add():
     
     return redirect(request.referrer)
 
-@college_bp.route('/college/update', methods=['POST'])
+@college_bp.route('/update', methods=['POST'])
 def update():
     if request.method == 'POST':
         try:
@@ -49,7 +49,7 @@ def update():
     
     return redirect(request.referrer)
 
-@college_bp.route('/college/delete', methods=['POST'])
+@college_bp.route('/delete', methods=['POST'])
 def delete():
     if request.method == 'POST':
         try:
@@ -64,7 +64,7 @@ def delete():
     
     return redirect(request.referrer)
 
-@college_bp.route('/college/search', methods=['POST'])
+@college_bp.route('/search', methods=['POST'])
 def search():
     search_query = request.form.get('search-query', '').lower()
 
