@@ -30,15 +30,15 @@ def create_app(test_config=None):
     #cursor = db.cursor()
 
     from .routes.college import college_bp as college_blueprint
-    app.register_blueprint(college_blueprint)
+    app.register_blueprint(college_blueprint, url_prefix='/college')
 
     from .routes.course import course_bp as course_blueprint
-    app.register_blueprint(course_blueprint)
+    app.register_blueprint(course_blueprint, url_prefix='/course')
 
     from .routes.student import student_bp as student_blueprint
-    app.register_blueprint(student_blueprint)
+    app.register_blueprint(student_blueprint, url_prefix='/student')
 
     from .routes.main import main_bp as main_blueprint
-    app.register_blueprint(main_blueprint)
+    app.register_blueprint(main_blueprint, url_prefix='/')
 
     return app
