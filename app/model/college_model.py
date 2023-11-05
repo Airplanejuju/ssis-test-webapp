@@ -2,17 +2,17 @@ from flask import request, flash, current_app
 from mysql.connector import Error
 from .util import gencode_college
 
-# Function to create a database connection
-def get_connection():
-    return current_app.config.get('MYSQL_DB')
 
+def get_connection():
+    # Access centralized database connection
+    connection = current_app.db_connection
+    return connection
+    
 # Function to query the database
 def query_database():
+
     # Create a connection
     connection = get_connection()
-
-    # Initialize cursor outside the try block
-    cursor = None
 
     # Query the database
     if connection:
@@ -24,13 +24,12 @@ def query_database():
             return data
         except Error as e:
             print(f"Error executing query: {e}")
-            # Close the cursor if an exception occurs
-            if cursor:
-                cursor.close()
         finally:
-            # Do not close the connection here, as it is being managed externally
+            #connection.close()
+            #print("Connection closed")
             pass
     return None
+
 
 
 # Function to search the database
@@ -50,21 +49,23 @@ def queryfull_database(columns, keyword):
             print(e)
             return None
         finally:
-            connection.close()
+            #connection.close()
+            pass
 
 # Function to check if record exists
-def record_exists(field, value):
+def record_exists(table, field, value):
     connection = get_connection()
     
     try:
         with connection.cursor() as cursor:
-            query = f"SELECT * FROM tblcollege WHERE {field} = %s"
+            query = f"SELECT * FROM {table} WHERE {field} = %s"
             cursor.execute(query, (value,))
             result = cursor.fetchone()
             return result is not None
     finally:
-        connection.close()
-
+        #connection.close()
+        pass
+    
 # Function to insert a record into the database
 def submit_form():
     if request.method == 'POST':
@@ -110,7 +111,8 @@ def submit_form():
             print(f"Error inserting data: {e}")
             connection.rollback()
         finally:
-            connection.close()
+            #connection.close()
+            pass
 
 # Function to update a record in the database
 def edit_form():
@@ -154,7 +156,8 @@ def edit_form():
             print(f"Error updating data: {e}")
             connection.rollback()
         finally:
-            connection.close()
+            #connection.close()
+            pass
 
 # Function to delete a record in the database
 def delete_form():
@@ -197,19 +200,24 @@ def delete_form():
             print(f"Error deleting data: {e}")
             connection.rollback()
         finally:
-            connection.close()
+            #connection.close()
+            pass
 
 # Function to initiate search query and return results
 def search_form(keyword):
-    # Define columns for tblcollege
-    columns = ['code', 'name']
+    if request.method == 'POST':
+        # Define columns for tblcollege
+        columns = ['code', 'name']
     
-    # Perform the search
-    result = queryfull_database(columns, keyword)
+        # Perform the search
+        result = queryfull_database(columns, keyword)
 
-    # Build and return results dictionary
-    results = {'tblcollege': result} if result else {}
+        # Build and return results dictionary
+        results = {'tblcollege': result} if result else {}
     
-    # Print and return results
-    print(f"Search results for '{keyword}' in table tblcollege: {results}")
-    return results
+        # Print and return results
+        print(f"Search results for '{keyword}' in table tblcollege: {results}")
+        return results
+    else:
+        # Handle other HTTP methods (GET, etc.) if needed
+        return None
