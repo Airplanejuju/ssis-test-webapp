@@ -38,8 +38,11 @@ $(document).on('click', '.delete-btn', function() {
         // Make an AJAX request to delete the item
         $.ajax({
             type: 'POST',
-            url: '{{ url_for("student_bp.delete") }}',  
+            url: deleteUrl,  
             data: { 'studentId': studentId },
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
             success: function(response) {
                 // Handle success, e.g., remove the corresponding row from the table
                 console.log(response);
@@ -66,14 +69,14 @@ $(document).ready(function() {
             return false;  // Prevent the default form submission
         }
 
-        // Get the table ID from the data attribute
-        var tableId = $(this).data('table-id');
-
         // Make an AJAX request to the server
         $.ajax({
             type: 'POST',
-            url: '{{ url_for("student_bp.search") }}',
-            data: { 'search-query': searchQuery, 'table-id': tableId },
+            url: searchUrl,
+            data: { 'search-query': searchQuery },
+            headers: {
+                'X-CSRFToken': csrfToken
+            },
             success: function(response) {
                 // Update the content inside the tbody with the search results
                 $('#student_tbody').html(response);
