@@ -61,6 +61,11 @@
     </button>
 </div>
 
+<script>
+    var deleteUrl = "{{ url_for('college_bp.delete') }}";
+    var searchUrl = "{{ url_for('college_bp.search') }}";
+    var csrfToken = "{{ csrf_token() }}";
+</script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="{{ url_for('static', filename='js/college.js') }}"></script>
 
