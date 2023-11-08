@@ -15,16 +15,3 @@
       </div>
     </div>
 </div>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var editButtons = document.querySelectorAll('.edit-btn');
-
-        editButtons.forEach(function(button) {
-            button.addEventListener('click', function() {
-                var collegeCode = button.getAttribute('data-college-code');
-                document.getElementById('collegeCode').value = collegeCode;
-            });
-        });
-    });
-</script>
