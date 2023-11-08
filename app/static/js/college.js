@@ -3,7 +3,7 @@ $(document).on('click', '.edit-btn', function() {
     var collegeCode = $(this).data('college-code');
     var collegeName = $(this).data('college-name');
 
-    // If you want to update a form field, for example, an input with an ID 'collegeCodeInput'
+    // If you want to update a form field, for example, an input with an ID 'collegeCode'
     $('#collegeCode').val(collegeCode);
     $('#collegeName').val(collegeName);
 
