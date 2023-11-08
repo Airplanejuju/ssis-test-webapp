@@ -4,7 +4,7 @@ $(document).on('click', '.edit-btn', function() {
     var collegeName = $(this).data('college-name');
 
     // If you want to update a form field, for example, an input with an ID 'collegeCodeInput'
-    $('#collegeCodeInput').val(collegeCode);
+    $('#collegeCode').val(collegeCode);
     $('#collegeName').val(collegeName);
 
     // Open the modal if needed
