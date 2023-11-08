@@ -158,7 +158,7 @@ def edit_form():
                         course_query = "UPDATE tblcourse SET name = %s, college = %s WHERE code = %s"
                         cursor.execute(course_query, (name, college, code))
                         # Flash a message
-                        flash(f'Updated into tblcourse: {course_query % (name, college, code)} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>', 'info')
+                        flash(f'Updated into tblcourse: {course_query % (name, college, code)}', 'info')
                     if not record_exists('tblcollege', 'code', college):
                         collegeName = generate_college(college)
                         # Insert into tblcollege
@@ -168,7 +168,7 @@ def edit_form():
                         course_query = "UPDATE tblcourse SET name = %s, college = %s WHERE code = %s"
                         cursor.execute(course_query, (name, college, code))
                         # Flash a message
-                        flash(f'Updated into tblcourse: {course_query % (name, college, code)} <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>', 'info')
+                        flash(f'Updated into tblcourse: {course_query % (name, college, code)}', 'info')
 
             # Commit the changes
             connection.commit()
