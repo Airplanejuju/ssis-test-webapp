@@ -1,7 +1,9 @@
 from flask import Blueprint, flash
 from app.model.student_model import query_database, submit_form, edit_form, delete_form, search_form
+from app.model.course_model import query_database as query_course
 from app.wtform.form import StudentForm
 from flask import render_template, request, redirect
+import re
 
 student_bp = Blueprint(
     "student_bp",
@@ -16,11 +18,17 @@ def student():
     print("Data from query:", data)
 
     form = StudentForm()
-    return render_template('table/student.html', data=data, form=form)
+    courses = query_course() #get courses available in course table
+    return render_template('table/student.html', data=data, form=form, courses=courses)
 
 @student_bp.route('/add', methods=['POST'])
 def add():
     if request.method == 'POST':
+        id = request.form['id']
+        #Check if ID correct format
+        if not re.match(r'\d{4}-\d{4}', id):
+            flash("Incorrect format.", 'danger')
+            return redirect(request.referrer)
         try:
             # Call the insert function in student_model
             submit_form()
