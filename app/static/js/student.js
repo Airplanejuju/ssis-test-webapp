@@ -47,7 +47,13 @@ $(document).on('click', '.delete-btn', function() {
                 // Handle success, e.g., remove the corresponding row from the table
                 console.log(response);
 
-                location.reload();
+                // Show a simple alert after successful deletion
+               alert(`Item with code ${studentId} deleted successfully!`);
+
+               // Reload the page after a delay
+               setTimeout(function(){
+                   location.reload();
+               }, 200);
             },
             error: function(error) {
                 // Handle error
