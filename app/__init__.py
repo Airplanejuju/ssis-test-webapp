@@ -1,7 +1,8 @@
 from flask import Flask
-from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY, BOOTSTRAP_SERVE_LOCAL
+from config import DB_USERNAME, DB_PASSWORD, DB_NAME, DB_HOST, SECRET_KEY, BOOTSTRAP_SERVE_LOCAL, API_KEY, API_SECRET, CLOUD_NAME
 from flask_wtf.csrf import CSRFProtect
 from mysql.connector import connect
+import cloudinary
 
 def create_app(test_config=None):
     app = Flask(__name__)
@@ -15,6 +16,13 @@ def create_app(test_config=None):
     )
     CSRFProtect(app)
     
+    cloudinary.config( 
+        cloud_name = CLOUD_NAME, 
+        api_key = API_KEY, 
+        api_secret = API_SECRET,
+        secure=True
+    )
+
     # Centralized database connection
     app.db_connection = connect(
         user=DB_USERNAME,
