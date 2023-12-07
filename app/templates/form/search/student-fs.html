@@ -9,6 +9,11 @@
                             <td>{{ value }}</td>
                         {% endfor %}
                         <td>
+                            <button class="btn btn-primary photo-btn" data-bs-toggle="modal" data-bs-target="#studentPhotoModal">
+                                <i class="fa fa-eye"></i> | View
+                            </button>
+                        </td>
+                        <td>
                             <button class="btn btn-warning edit-btn" data-bs-toggle="modal" data-bs-target="#studentEditModal"
                             data-student-id="{{ row[0] }}" data-student-firstname="{{ row[1] }}"
                             data-student-lastname="{{ row[2] }}" data-student-course="{{ row[3] }}"
