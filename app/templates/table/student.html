@@ -57,7 +57,8 @@
                                 <td>{{ student.year }}</td>
                                 <td>{{ student.gender }}</td>
                                 <td>
-                                    <button class="btn btn-primary photo-btn" data-bs-toggle="modal" data-bs-target="#studentPhotoModal">
+                                    <button class="btn btn-primary photo-btn" data-bs-toggle="modal" data-bs-target="#studentPhotoModal"
+                                        data-student-photo="{{ student.photoUrl }}"> 
                                         <i class="fa fa-eye"> | View</i>
                                     </button>
                                 </td>
@@ -65,7 +66,7 @@
                                     <button class="btn btn-warning edit-btn" data-bs-toggle="modal" data-bs-target="#studentEditModal"
                                     data-student-id="{{ student.id }}" data-student-firstname="{{ student.firstName }}"
                                     data-student-lastname="{{ student.lastName }}" data-student-course="{{ student.course }}"
-                                    data-student-year="{{ student.year }}" data-student-gender="{{ student.gender }}">
+                                    data-student-year="{{ student.year }}" data-student-gender="{{ student.gender }}" data-student-photo="{{ student.photoUrl }}">
                                     <i class="fa fa-pencil"></i> | Edit</button>
                                     <button class="btn btn-danger delete-btn" data-student-id="{{ student.id }}"><i class="fa fa-trash"></i> | Delete</button>
                                 </td>
