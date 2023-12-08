@@ -1,3 +1,24 @@
+$(document).on('click', '.photo-btn', function(){
+    // Capture data attribute
+    var studentPhoto = $(this).data('student-photo');
+
+    // Check if the URL is truthy
+    if (studentPhoto != "None") {
+        // Update image source
+        $('#studentPhotoPreview').attr('src', studentPhoto);
+
+        // Print value to check
+        console.log("Photo source:", studentPhoto);
+
+        // Open the modal if needed
+        $('#studentPhotoModal').modal('show');
+    } else {
+        src = "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg"
+        $('#studentPhotoPreview').attr('src', src);
+        console.log("Student photo URL is empty or undefined.");
+    }
+});
+
 $(document).on('click', '.edit-btn', function(){
     // Capture data attributes
     var studentId = $(this).data('student-id');
@@ -6,6 +27,7 @@ $(document).on('click', '.edit-btn', function(){
     var studentCourse = $(this).data('student-course');
     var studentYear = $(this).data('student-year');
     var studentGender = $(this).data('student-gender');
+    var studentPhoto = $(this).data('student-photo');
 
     // If you want to update a form field
     $('#studentId').val(studentId);
@@ -14,6 +36,7 @@ $(document).on('click', '.edit-btn', function(){
     $('#studentCourse').val(studentCourse);
     $('#studentYear').val(studentYear);
     $('#studentGender').val(studentGender);
+    $('#studentPhoto').val(studentPhoto);
 
     // Print values to check
     console.log("ID:", studentId);
@@ -22,6 +45,7 @@ $(document).on('click', '.edit-btn', function(){
     console.log("Course:", studentCourse);
     console.log("Year:", studentYear);
     console.log("Gender:", studentGender);
+    console.log("Photo:", studentPhoto);
 
     // Open the modal if needed
     $('#studentEditModal').modal('show');
