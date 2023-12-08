@@ -5,6 +5,8 @@ from app.wtform.form import StudentForm
 from flask import render_template, request, redirect
 import re
 
+from cloudinary.uploader import upload
+
 student_bp = Blueprint(
     "student_bp",
     __name__,
@@ -25,13 +27,19 @@ def student():
 def add():
     if request.method == 'POST':
         id = request.form['id']
+        photo = request.files['photo']
         #Check if ID correct format
         if not re.match(r'\d{4}-\d{4}', id):
             flash("Incorrect format.", 'danger')
             return redirect(request.referrer)
         try:
+            if photo:
+                upload_result = upload(photo, folder="ssis", resource_type='image')
+                secure_url = upload_result['secure_url']
+            else:
+                secure_url = None
             # Call the insert function in student_model
-            submit_form()
+            submit_form(secure_url)
 
             # Flash a success message
             flash('Added successfully!', 'success')
