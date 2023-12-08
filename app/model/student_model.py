@@ -68,7 +68,7 @@ def record_exists(table, field, value):
         pass
 
 # Function to insert a record into the database
-def submit_form():
+def submit_form(secure_url=None):
     if request.method == 'POST':
         # Extract form data dynamically
         form_data = {}
@@ -84,12 +84,9 @@ def submit_form():
             last_name = form_data.get('lastname', '')
         if 'gender' in form_data:
             gender = form_data.get('gender', '')
-        if 'college' in form_data:
-            college = form_data.get('college', '')
-            college_code = gencode_college(college)
         if 'course' in form_data:
             course = form_data.get('course', '')
-            course_code = gencode_course(course)
+            # flash(f'Course: {course}', 'info')
         if 'year' in form_data:
             year = int(form_data.get('year', ''))
 
@@ -104,33 +101,14 @@ def submit_form():
 
         try:
             with connection.cursor() as cursor:
-                if 'college' in form_data:
-                    if not record_exists('tblcollege', 'code', college_code):
-                        # Insert into tblcollege
-                        college_query = "INSERT INTO tblcollege (code, name) VALUES (%s, %s)"
-                        cursor.execute(college_query, (college_code, college))
-                        # Flash a message
-                        flash(f'Inserted into tblcollege: {college_query % (college_code, college)}', 'info')
-                    else:
-                        flash(f'College already exists: {college_code}', 'danger')
-
-                if 'course' in form_data:
-                    if not record_exists('tblcourse', 'code', course_code):
-                        # Insert into tblcourse
-                        course_query = "INSERT INTO tblcourse (code, name, college) VALUES (%s, %s, %s)"
-                        cursor.execute(course_query, (course_code, course, college_code))
-                        # Flash a message
-                        flash(f'Inserted into tblcourse: {course_query % (course_code, course, college)}', 'info')
-                    else:
-                        flash(f'Course already exists: {course_code}', 'danger')
 
                 if 'id' in form_data:
                     if not record_exists('tblstudent', 'id', id):
                         # Insert into tblstudent
-                        student_query = "INSERT INTO tblstudent (id, firstName, lastName, course, year, gender) VALUES (%s, %s, %s, %s, %s, %s)"
-                        cursor.execute(student_query, (id, first_name, last_name, course_code, year, gender))
+                        student_query = "INSERT INTO tblstudent (id, firstName, lastName, course, year, gender, photoUrl) VALUES (%s, %s, %s, %s, %s, %s, %s)"
+                        cursor.execute(student_query, (id, first_name, last_name, course, year, gender, secure_url))
                         # Flash a message
-                        flash(f'Inserted into tblstudent: {student_query % (id, first_name, last_name, course_code, year, gender)}', 'info')
+                        flash(f'Inserted into tblstudent: {student_query % (id, first_name, last_name, course, year, gender, secure_url)}', 'info')
                     else:
                         flash(f'Student already exists: {id}', 'danger')
 
@@ -145,7 +123,6 @@ def submit_form():
             print(f"Error inserting data: {e}")
             connection.rollback()
         finally:
-            #connection.close()
             pass
 
 # Function to update a record in the database
