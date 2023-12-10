@@ -210,4 +210,6 @@ def gencode_college_course(course):
 
     return college_codes.get(course, 'COL')  # Default to 'COL' if not found
 
+def public_id(url):
+    return url.split("/")[-1].split(".")[0]
 
