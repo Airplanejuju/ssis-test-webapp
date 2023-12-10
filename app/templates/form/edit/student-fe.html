@@ -1,6 +1,6 @@
 <div class="card ml-2 mr-2">
     <div class="card-body"> 
-        <form method="POST" action="{{ url_for('student_bp.update') }}">
+        <form method="POST" action="{{ url_for('student_bp.update') }}" enctype="multipart/form-data">
             {{ form.hidden_tag() }}
     
             <div class="mb-3 ml-2 mr-2">
@@ -49,8 +49,14 @@
             </div>
             
             <div class="mb-3 ml-2 mr-2">
-                <label for="{{ form.photo.id }}" class="form-label">Picture:</label>
-                {{ form.photo(class="form-control", accept="image/*") }}
+                <label for="{{ form.photo.id }}" class="form-label">Current Picture:</label>
+                <img id="currentStudentPhoto" class="img-fluid" alt="Current Student Photo">
+                <input type="hidden" id="currentStudentPhotoUrl" name="currentStudentPhotoUrl">
+            </div>
+
+            <div class="mb-3 ml-2 mr-2">
+                <label for="{{ form.photo.id }}" class="form-label">Update Picture:</label>
+                <input type="file" id="studentPhoto" name="studentPhoto" class="form-control" accept="image/*"></input>
             </div>
 
             <div class="d-flex justify-content-end">
