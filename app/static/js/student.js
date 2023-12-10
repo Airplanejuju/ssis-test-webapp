@@ -36,8 +36,27 @@ $(document).on('click', '.edit-btn', function(){
     $('#studentCourse').val(studentCourse);
     $('#studentYear').val(studentYear);
     $('#studentGender').val(studentGender);
-    $('#studentPhoto').val(studentPhoto);
+    
+    // Display current photo if available
+    if (studentPhoto !== 'None') {
+        $('#currentStudentPhoto').attr('src', studentPhoto);
+        // Store the current photo URL in a hidden input field
+        $('#currentStudentPhotoUrl').val(studentPhoto);
+    } else {
+        src = "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg"
+        $('#currentStudentPhoto').attr('src', src);
 
+        console.log("No Photo Available")
+        $('#currentStudentPhoto').attr('alt', 'No Photo');
+        // Clear the hidden input field if there is no current photo
+        $('#currentStudentPhotoUrl').val(None);
+    }
+
+    // Update the file input value only if a new photo is selected
+    if (studentPhoto) {
+        $('#studentPhoto').val(studentPhoto);
+    }
+    
     // Print values to check
     console.log("ID:", studentId);
     console.log("First Name:", studentFirstname);
@@ -121,9 +140,9 @@ $(document).ready(function() {
     });
 });
 
-$(document).ready(function(){
-    // Set a timeout to fade out the alert after 3 seconds (adjust the duration as needed)
-    setTimeout(function(){
-        $('.alert').fadeOut('slow');
-    }, 3000);
-});
+// $(document).ready(function(){
+//     // Set a timeout to fade out the alert after 3 seconds (adjust the duration as needed)
+//     setTimeout(function(){
+//         $('.alert').fadeOut('slow');
+//     }, 3000);
+// });
