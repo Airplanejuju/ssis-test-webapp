@@ -1,6 +1,6 @@
 from flask import request, flash, current_app
 from mysql.connector import Error
-from .util import gencode_course, gencode_college, generate_college, gencode_college_course, generate_course
+from .util import generate_college, gencode_college_course, generate_course
 
 
 def get_connection():
@@ -67,6 +67,19 @@ def record_exists(table, field, value):
         #connection.close()
         pass
 
+def photo_exists(id):
+    connection = get_connection()
+    
+    try:
+        with connection.cursor(buffered=True) as cursor:
+            query = f"SELECT photoUrl FROM tblstudent WHERE id = {id}"
+            cursor.execute(query)
+            result = cursor.fetchone()
+            return result is not None
+    finally:
+        pass
+
+
 # Function to insert a record into the database
 def submit_form(secure_url=None):
     if request.method == 'POST':
@@ -126,7 +139,7 @@ def submit_form(secure_url=None):
             pass
 
 # Function to update a record in the database
-def edit_form():
+def edit_form(secure_url=None):
     if request.method == 'POST':
         # Extract form data dynamically
         form_data = {}
@@ -139,7 +152,9 @@ def edit_form():
             firstName = form_data.get('studentFirstname', '')
             lastName = form_data.get('studentLastname', '')
             course = form_data.get('studentCourse', '')
-            year = int(form_data.get('studentYear', ''))
+            # Handle year conversion more gracefully
+            year_str = form_data.get('studentYear', '')
+            year = int(year_str) if year_str.isdigit() else None
             gender = form_data.get('studentGender', '')
 
         # Database connection
@@ -152,54 +167,23 @@ def edit_form():
             flash('Connection failed!', 'danger')
 
         try:
-            with connection.cursor() as cursor:
-                if 'studentId' in form_data:
-                    # Update tblstudent
-                    if record_exists('tblcourse','code', course):
+            with connection.cursor(buffered=True) as cursor:
+                    if photo_exists(id) and secure_url is None:
                         student_query = "UPDATE tblstudent SET firstName = %s, lastName = %s, course = %s, year = %s, gender = %s WHERE id = %s"
                         cursor.execute(student_query, (firstName, lastName, course, year, gender, id))
-                        # Flash a message
-                        flash(f'Updated into tblstudent: {student_query % (firstName, lastName, course, year, gender, id)}', 'info')
-                    if not record_exists('tblcourse', 'code', course):
-                        print(f"Course: {course}")
+                    else:
+                        student_query = "UPDATE tblstudent SET firstName = %s, lastName = %s, course = %s, year = %s, gender = %s, photoUrl = %s WHERE id = %s"
+                        cursor.execute(student_query, (firstName, lastName, course, year, gender, secure_url, id))
 
-                        collegeCode = gencode_college_course(course)
-                        print(f"Received: {collegeCode}")
-
-                        name =  generate_course(course)
-                        print(f"Name Received: {name}")
-            
-                        if record_exists('tblcollege', 'code', collegeCode):
-                            # Insert into tblcourse
-                            course_query = "INSERT INTO tblcourse (code, name, college) VALUES (%s, %s, %s)"
-                            cursor.execute(course_query, (course, name, collegeCode))
-                            # Then update tblstudent
-                            student_query = "UPDATE tblstudent SET firstName = %s, lastName = %s, course = %s, year = %s, gender = %s WHERE id = %s"
-                            cursor.execute(student_query, (firstName, lastName, course, year, gender, id))
-                            # Flash a message
-                            flash(f'Updated into tblstudent: {student_query % (firstName, lastName, course, year, gender, id)}', 'info')
-                        if not record_exists('tblcollege', 'code', collegeCode):
-                            collegeName = generate_college(collegeCode)
-                            # Insert into tblcollege
-                            college_query = "INSERT INTO tblcollege (code, name) VALUES (%s, %s)"
-                            cursor.execute(college_query, (collegeCode, collegeName))
-                            # Then insert into tblcourse
-                            course_query = "INSERT INTO tblcourse (code, name, college) VALUES (%s, %s, %s)"
-                            cursor.execute(course_query, (course, name, collegeCode))
-                            # Then update tblstudent
-                            student_query = "UPDATE tblstudent SET firstName = %s, lastName = %s, course = %s, year = %s, gender = %s WHERE id = %s"
-                            cursor.execute(student_query, (firstName, lastName, course, year, gender, id))
-                            # Flash a message
-                            flash(f'Updated into tblstudent: {student_query % (firstName, lastName, course, year, gender, id)}', 'info')
-            
             # Commit the changes
             connection.commit()
-
+                
         except Exception as e:
             # Flash an error message
             flash(f'Error updating data: {e}', 'danger')
 
             # Handle the exception (rollback, log, etc.)
+            print("ID is : ", id)
             print(f"Error updating data: {e}")
             connection.rollback()
         finally:
