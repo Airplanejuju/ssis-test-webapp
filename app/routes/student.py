@@ -1,11 +1,12 @@
-from flask import Blueprint, flash
+from flask import Blueprint, flash, jsonify
 from app.model.student_model import query_database, submit_form, edit_form, delete_form, search_form
 from app.model.course_model import query_database as query_course
 from app.wtform.form import StudentForm
 from flask import render_template, request, redirect
 import re
 
-from cloudinary.uploader import upload
+from cloudinary.uploader import upload, destroy
+from app.model.util import public_id
 
 student_bp = Blueprint(
     "student_bp",
@@ -49,19 +50,62 @@ def add():
     
     return redirect(request.referrer)
 
+from flask import make_response
+
 @student_bp.route('/update', methods=['POST'])
 def update():
     if request.method == 'POST':
+        currentPhoto = request.form.get('currentStudentPhotoUrl')
+        newPhoto = request.files['studentPhoto']
+        
+        print("Current Photo: ",currentPhoto)
+        print("New Photo :",newPhoto)
         try:
-            # Call the update function in student_model
-            edit_form()
+            # Upload new photo to cloudinary
+            if newPhoto:
+                upload_result = upload(newPhoto, folder="ssis", resource_type='image')
+                secure_url = upload_result['secure_url']
 
-            # Flash a success message
-            flash('Updated successfully!', 'success')
+                flash(f"Uploaded new photo: {secure_url}", 'info')
+                # Delete old photo from cloudinary
+                if currentPhoto:
+                    try:
+                        # Extract public ID from the photo URL
+                        public_id_val = public_id(currentPhoto)
+
+                        # Delete the photo using its public ID
+                        result = destroy("ssis/" + public_id_val)
+
+                        # Check the deletion result
+                        if result.get("result") == "ok":
+                            # Flash a success message
+                            flash('Updated successfully!', 'success')
+                        else:
+                            # Flash an error message
+                            flash(f"Error deleting old photo: {result.get('result')}", 'danger')
+                    except Exception as e:
+                        flash(f"Error deleting old photo: {str(e)}", 'danger')
+
+                    # Call the update function in student_model
+                    edit_form(secure_url)
+                else:
+                    # Call the update function in student_model
+                    edit_form(secure_url)
+                    # Flash a success message
+                    flash('Updated successfully!', 'success')
+            else:
+                secure_url = None
+
+                # Call the update function in student_model
+                edit_form(secure_url)
+                # Flash a success message
+                flash('Updated successfully! No new photo.', 'success')
+
         except Exception as e:
             # Flash an error message
             flash(f'Update failed: {str(e)}', 'danger')
     
+    # return jsonify({'success': False, 'error': 'Invalid request. Missing required data.'})
     return redirect(request.referrer)
 
 @student_bp.route('/delete', methods=['POST'])
