@@ -76,7 +76,7 @@
                                     data-student-lastname="{{ student.lastName }}" data-student-course="{{ student.course }}"
                                     data-student-year="{{ student.year }}" data-student-gender="{{ student.gender }}" data-student-photo="{{ student.photoUrl }}">
                                     <i class="fa fa-pencil"></i> | Edit</button>
-                                    <button class="btn btn-danger delete-btn" data-student-id="{{ student.id }}"><i class="fa fa-trash"></i> | Delete</button>
+                                    <button class="btn btn-danger delete-btn" data-student-id="{{ student.id }}" data-student-photo="{{ student.photoUrl }}"><i class="fa fa-trash"></i> | Delete</button>
                                 </td>
                             </tr>
                         {% endfor %}
