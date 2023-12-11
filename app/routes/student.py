@@ -1,4 +1,4 @@
-from flask import Blueprint, flash, jsonify
+from flask import Blueprint, flash
 from app.model.student_model import query_database, submit_form, edit_form, delete_form, search_form
 from app.model.course_model import query_database as query_course
 from app.wtform.form import StudentForm
@@ -111,12 +111,36 @@ def update():
 @student_bp.route('/delete', methods=['POST'])
 def delete():
     if request.method == 'POST':
+        # Retrieve photo url
+        photo = request.form.get('photoUrl')
+        print("Photo: ",photo)
         try:
-            # Call the delete function in student_model
-            delete_form()
+            # Delete old photo from cloudinary
+            if photo:
+                try:
+                    # Extract public ID from the photo URL
+                    public_id_val = public_id(photo)
 
-            # Flash a success message
-            flash('Deleted successfully!', 'success')
+                    # Delete the photo using its public ID
+                    result = destroy("ssis/" + public_id_val)
+
+                    # Check the deletion result
+                    if result.get("result") == "ok":
+                        # Flash a success message
+                        flash('Updated successfully!', 'success')
+                    else:
+                        # Flash an error message
+                        flash(f"Error deleting old photo: {result.get('result')}", 'danger')
+                except Exception as e:
+                    flash(f"Error deleting old photo: {str(e)}", 'danger')
+
+                # Call the delete function in student_model
+                delete_form()
+            else:
+                # Call the delete function in student_model
+                delete_form()
+                # Flash a success message
+                flash('Deleted successfully!', 'success')
         except Exception as e:
             # Flash an error message
             flash(f'Delete failed: {str(e)}', 'danger')
