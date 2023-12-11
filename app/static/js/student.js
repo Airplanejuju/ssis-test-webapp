@@ -73,6 +73,7 @@ $(document).on('click', '.edit-btn', function(){
 $(document).on('click', '.delete-btn', function() {
     // Capture data attributes
     var studentId = $(this).data('student-id');
+    var photoUrl = $(this).data('student-photo');
 
     // Confirm deletion with user if needed
     var confirmDelete = confirm(`Are you sure you want to delete ${studentId}?`);
@@ -82,7 +83,7 @@ $(document).on('click', '.delete-btn', function() {
         $.ajax({
             type: 'POST',
             url: deleteUrl,  
-            data: { 'studentId': studentId },
+            data: { 'studentId': studentId, 'photoUrl': photoUrl },
             headers: {
                 'X-CSRFToken': csrfToken
             },
