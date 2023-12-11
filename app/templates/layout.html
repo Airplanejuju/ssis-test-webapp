@@ -23,9 +23,15 @@
     <header>
         <nav class="navbar navbar-light" style="background-color:black;color: white; font-family: 'Courier New', Courier, monospace;">
             <div class="container-fluid">
-              <a class="navbar-brand" style="color: white; margin-left: 1.5rem;"><i class="fa fa-file-text"></i> SSIS</a>
-              <a class="nav-link" style="color: white;" href="{{ url_for('main_bp.home') }}"><i class="fa fa-home"></i></a>
-              <a class="nav-link disabled" style="font-size: small; font-family: sans-serif; margin-right: 0.5rem;" href="#" tabindex="-1" aria-disabled="true">Simple Student Information System</a>
+                <a class="navbar-brand" style="color: #5b5858; margin-left: 1.5rem;"><i class="fa fa-file-text"></i> SSIS</a>
+                <!-- <a class="nav-link" style="color: white;" href="{{ url_for('main_bp.home') }}"><i class="fa fa-home"></i></a> -->
+                <a class="nav-link" style="color: white;" href="{{ url_for('student_bp.student') }}"
+                onmouseover="this.style.color='rgba(255, 0, 255, 0.8 )'" onmouseout="this.style.color='white'"><i class="fa fa-user"></i> Student</a>
+                <a class="nav-link" style="color: white;" href="{{ url_for('course_bp.course') }}"
+                onmouseover="this.style.color='rgba(255, 0, 255, 0.8)'" onmouseout="this.style.color='white'"><i class="fa fa-book"></i> Course</a>
+                <a class="nav-link" style="color: white;" href="{{ url_for('college_bp.college') }}"
+                onmouseover="this.style.color='rgba(255, 0, 255, 0.8)'" onmouseout="this.style.color='white'"><i class="fa fa-university"></i> College</a>
+                <a class="nav-link disabled" style="font-size: small; font-family: sans-serif; margin-right: 0.5rem;" href="#" tabindex="-1" aria-disabled="true">Simple Student Information System</a>
             </div>
           </nav>
     </header>
