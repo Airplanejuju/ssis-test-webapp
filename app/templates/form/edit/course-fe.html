@@ -5,12 +5,21 @@
 
             <div class="mb-3 ml-2 mr-2">
                 <label for="{{ form.college.id }}" class="form-label">College:</label>
-                <input type="text" id="courseCollege" name="courseCollege" class="form-control">
+                <select class="form-select" id="courseCollege" name="courseCollege" required>
+                    <option value="" selected disabled>--- Select College ---</option>
+                    <option value="COE">COE</option>
+                    <option value="CASS">CASS</option>
+                    <option value="CEBA">CEBA</option>
+                    <option value="CED">CED</option>
+                    <option value="CHS">CHS</option>
+                    <option value="CSM">CSM</option>
+                    <option value="CCS">CCS</option>
+                </select>
             </div>
     
             <div class="mb-3 ml-2 mr-2">
                 <label for="{{ form.course.id }}" class="form-label">Course:</label>
-                <input type="text" id="courseName" name="courseName" class="form-control">
+                <input type="text" id="courseName" name="courseName" class="form-control" required>
                 <!-- Add hidden input for course code -->
                 <input type="hidden" id="courseCode" name="courseCode">
             </div>
