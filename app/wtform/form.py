@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, FileField#, IntegerField
+from wtforms import StringField, SubmitField, SelectField, FileField
 from wtforms.validators import DataRequired, Length
-
+            
 class StudentForm(FlaskForm):
     id = StringField('ID', validators=[DataRequired(message='Please input your ID.'),Length(min=9, max=9)])
        
@@ -25,7 +25,7 @@ class StudentForm(FlaskForm):
     year_choices = [('', '-- Please select --', {'disabled': True}),('1','1st Year'),('2','2nd Year'),('3','3rd Year'),('4','4th Year')]
     year = SelectField('Year', choices=year_choices, validators=[DataRequired()], default='')
 
-    photo = FileField('Upload Photo')
+    photo = FileField('Upload Photo', id='photo')
 
     submit = SubmitField('Submit')
 
