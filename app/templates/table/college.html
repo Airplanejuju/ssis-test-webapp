@@ -13,15 +13,10 @@
 {% endwith %}
 <br>
 <h2 class="ml-2 mr-2 mb-3 d-flex justify-content-between align-items-center">College Information
-    <div class="dropdown">
-        <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa fa-eye"></i> View
+    <div class="mr-2 d-flex justify-content-end">
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#collegeModal">
+            <i class="fa fa-plus"></i> Add College
         </button>
-        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-          <li><a class="dropdown-item" href="{{ url_for('student_bp.student') }}">Student Table</a></li>
-          <li><a class="dropdown-item" href="{{ url_for('course_bp.course') }}">Course Table</a></li>
-          <li><a class="dropdown-item active" href="#">College Table</a></li>
-        </ul>
     </div>
 </h2>
 
@@ -55,11 +50,6 @@
     </div>
 </div>
 <br>
-<div class="mr-2 d-flex justify-content-end">
-    <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#collegeModal">
-        <i class="fa fa-plus"></i> Add College
-    </button>
-</div>
 
 <script>
     var deleteUrl = "{{ url_for('college_bp.delete') }}";
