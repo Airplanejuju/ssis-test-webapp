@@ -1,0 +1,55 @@
+
+<div class="card ml-2 mr-2">
+    <div class="card-body"> 
+        <form method="POST" action="{{ url_for('student_bp.add') }}" enctype="multipart/form-data">
+            {{ form.hidden_tag() }}
+    
+            <div class="mb-3 ml-2 mr-2">
+                <label for="{{ form.id.id }}" class="form-label">Student ID:</label>
+                {{ form.id(class="form-control") }}
+            </div>
+    
+            <div class="mb-3 ml-2 mr-2">
+                <label for="{{ form.firstname.id }}" class="form-label">First Name:</label>
+                {{ form.firstname(class="form-control") }}
+            </div>
+    
+            <div class="mb-3 ml-2 mr-2">
+                <label for="{{ form.lastname.id }}" class="form-label">Last Name:</label>
+                {{ form.lastname(class="form-control") }}
+            </div>
+    
+            <div class="mb-3 ml-2 mr-2">
+                <label for="{{ form.gender.id }}" class="form-label">Gender:</label>
+                {{ form.gender(class="form-select w-auto") }}
+            </div>
+    
+            <div class="mb-3 ml-2 mr-2">
+                <label for="addStudentCourse" class="form-label">Course:</label>
+                <select id="addStudentCourse" class="form-select w-100" name="course" required>
+                    <option value="" selected disabled>--- Select Course ---</option>
+                    {% for course in courses %}
+                        <option value="{{ course.code }}">{{ course.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+    
+            <div class="mb-3 ml-2 mr-2">
+                <label for="{{ form.year.id }}" class="form-label">Year:</label>
+                {{ form.year(class="form-select w-auto") }}
+            </div>
+
+            <div class="mb-3 ml-2 mr-2">
+                <label for="{{ form.photo.id }}" class="form-label">Picture:</label>
+                {{ form.photo(class="form-control", accept="image/*") }}
+            </div>
+
+            <div class="d-flex justify-content-end">
+                <button type="submit" class="btn btn-primary mr-2"><i class="fa fa-paper-plane-o"></i> | Submit</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+

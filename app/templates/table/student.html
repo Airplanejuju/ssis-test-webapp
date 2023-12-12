@@ -1,0 +1,103 @@
+<section>
+    {% extends "layout.html" %}
+    {% block content %}
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        {% for category, message in messages %}
+        <div class="alert alert-{{ category }}" role="alert">
+            {{ message }}
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
+
+    <br>
+    <h2 class="ml-2 mr-2 mb-3 d-flex justify-content-between align-items-center">Student Information
+        <div class="mr-2 d-flex justify-content-end">
+            <button type="button" class="btn btn-success" style="border: none;" data-bs-toggle="modal" data-bs-target="#studentModal">
+                <i class="fa fa-plus"></i>  Add Student
+            </button>
+        </div>
+    </h2>
+    
+
+    <div class="card ml-2 mr-2">
+        <form id="searchForm" class="mb-2 d-flex">
+            <input id="searchInput" class="form-control me-2 mr-1" type="search" placeholder="Search" aria-label="Search">
+            <button id="searchButton" class="btn btn-outline-dark search-btn" data-table-id="tblstudent"><i class="fa fa-search"></i></button>
+        </form>
+        <div class="card-body table-responsive" style="height:40rem; overflow:auto;">
+            <table id="tblstudent" class="table table-hover" style="text-align: center;">
+                <thead class="table-secondary">
+                    <tr style="font-family: sans-serif;">
+                        <th>Profile Picture</th>
+                        <th>ID</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Course</th>
+                        <th>Year</th>
+                        <th>Gender</th>
+                        <th>Picture</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="student_tbody">
+                    {% if data %}
+                        {% for student in data %}
+                            <tr>
+                                <td>
+                                    {% if student.photoUrl %}
+                                    <img src="{{ student.photoUrl }}" class="img-fluid" width="80" height="80">
+                                    {% else %}
+                                    <img src="https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg" class="img-fluid" width="80" height="80">
+                                    {% endif %}
+                                </td>
+                                <td>{{ student.id }}</td>
+                                <td>{{ student.firstName }}</td>
+                                <td>{{ student.lastName }}</td>
+                                <td>{{ student.course }}</td>
+                                <td>{{ student.year }}</td>
+                                <td>{{ student.gender }}</td>
+                                <td>
+                                    <button class="btn btn-primary photo-btn" data-bs-toggle="modal" data-bs-target="#studentPhotoModal"
+                                        data-student-photo="{{ student.photoUrl }}"> 
+                                        <i class="fa fa-eye"> | View</i>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-warning edit-btn" data-bs-toggle="modal" data-bs-target="#studentEditModal"
+                                    data-student-id="{{ student.id }}" data-student-firstname="{{ student.firstName }}"
+                                    data-student-lastname="{{ student.lastName }}" data-student-course="{{ student.course }}"
+                                    data-student-year="{{ student.year }}" data-student-gender="{{ student.gender }}" data-student-photo="{{ student.photoUrl }}">
+                                    <i class="fa fa-pencil"></i> | Edit</button>
+                                    <button class="btn btn-danger delete-btn" data-student-id="{{ student.id }}" data-student-photo="{{ student.photoUrl }}"><i class="fa fa-trash"></i> | Delete</button>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    {% else %}
+                        <tr>
+                            <td colspan="7">No results found</td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>    
+</section>
+
+<script>
+    var deleteUrl = "{{ url_for('student_bp.delete') }}";
+    var searchUrl = "{{ url_for('student_bp.search') }}";
+    var csrfToken = "{{ csrf_token() }}";
+</script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="{{ url_for('static', filename='js/student.js') }}"></script>
+
+<!-- Student Modal here -->
+{% include 'modal/add/student-m.html' %}
+{% include 'modal/edit/student-me.html' %}
+{% include 'modal/photo/student.html' %}
+
+{% endblock %}
