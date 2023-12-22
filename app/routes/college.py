@@ -27,7 +27,7 @@ def add():
             submit_form()
 
             # Flash a success message
-            flash('Added successfully!', 'success')
+            # flash('Added successfully!', 'success')
         except Exception as e:
             # Flash an error message
             flash(f'Add failed: {str(e)}', 'danger')
@@ -42,7 +42,7 @@ def update():
             edit_form()
 
             # Flash a success message
-            flash('Updated successfully!', 'success')
+            # flash('Updated successfully!', 'success')
         except Exception as e:
             # Flash an error message
             flash(f'Update failed: {str(e)}', 'danger')
@@ -57,7 +57,7 @@ def delete():
             delete_form()
 
             # Flash a success message
-            flash('Deleted successfully!', 'success')
+            # flash('Deleted successfully!', 'success')
         except Exception as e:
             # Flash an error message
             flash(f'Delete failed: {str(e)}', 'danger')

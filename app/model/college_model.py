@@ -83,10 +83,10 @@ def submit_form():
         connection = get_connection()
 
         # Check if connection is successful
-        if connection:
-            flash('Connection successful!', 'success')
-        else:
-            flash('Connection failed!', 'danger')
+        # if connection:
+        #     flash('Connection successful!', 'success')
+        # else:
+        #     flash('Connection failed!', 'danger')
 
         try:
             with connection.cursor() as cursor:
@@ -96,7 +96,8 @@ def submit_form():
                         college_query = "INSERT INTO tblcollege (code, name) VALUES (%s, %s)"
                         cursor.execute(college_query, (college_code, college))
                         # Flash a message
-                        flash(f'Inserted into tblcollege: {college_query % (college_code, college)}', 'info')
+                        # flash(f'Inserted into tblcollege: {college_query % (college_code, college)}', 'info')
+                        flash('Data inserted successfully', 'success')
                     else:
                         flash(f'College already exists: {college_code}', 'danger')
 
@@ -131,10 +132,10 @@ def edit_form():
         connection = get_connection()
 
         # Check if connection is successful
-        if connection:
-            flash('Connection successful!', 'success')
-        else:
-            flash('Connection failed!', 'danger')
+        # if connection:
+        #     flash('Connection successful!', 'success')
+        # else:
+        #     flash('Connection failed!', 'danger')
 
         try:
             with connection.cursor() as cursor:
@@ -143,7 +144,8 @@ def edit_form():
                     college_query = "UPDATE tblcollege SET name = %s WHERE code = %s"
                     cursor.execute(college_query, (name, code))
                     # Flash a message
-                    flash(f'Updated into tblcollege: {college_query % (code, name)}', 'info')
+                    # flash(f'Updated into tblcollege: {college_query % (code, name)}', 'info')
+                    flash('Data updated successfully', 'success')
 
             # Commit the changes
             connection.commit()
@@ -175,10 +177,10 @@ def delete_form():
         connection = get_connection()
 
         # Check if connection is successful
-        if connection:
-            flash('Connection successful!', 'success')
-        else:
-            flash('Connection failed!', 'danger')
+        # if connection:
+        #     flash('Connection successful!', 'success')
+        # else:
+        #     flash('Connection failed!', 'danger')
 
         try:
             with connection.cursor() as cursor:
@@ -187,7 +189,7 @@ def delete_form():
                     college_query = "DELETE FROM tblcollege WHERE code = %s"
                     cursor.execute(college_query, (code,))
                     # Flash a message
-                    flash(f'Deleted from tblcollege: {college_query % (code,)}', 'info')
+                    # flash(f'Deleted from tblcollege: {college_query % (code,)}', 'info')
 
             # Commit the changes
             connection.commit()
