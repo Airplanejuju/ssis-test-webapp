@@ -43,7 +43,7 @@ def add():
             submit_form(secure_url)
 
             # Flash a success message
-            flash('Added successfully!', 'success')
+            # flash('Added successfully!', 'success')
         except Exception as e:
             # Flash an error message
             flash(f'Add failed: {str(e)}', 'danger')
@@ -66,7 +66,7 @@ def update():
                 upload_result = upload(newPhoto, folder="ssis", resource_type='image')
                 secure_url = upload_result['secure_url']
 
-                flash(f"Uploaded new photo: {secure_url}", 'info')
+                # flash(f"Uploaded new photo: {secure_url}", 'info')
                 # Delete old photo from cloudinary
                 if currentPhoto:
                     try:
@@ -77,12 +77,12 @@ def update():
                         result = destroy("ssis/" + public_id_val)
 
                         # Check the deletion result
-                        if result.get("result") == "ok":
-                            # Flash a success message
-                            flash('Updated successfully!', 'success')
-                        else:
-                            # Flash an error message
-                            flash(f"Error deleting old photo: {result.get('result')}", 'danger')
+                        # if result.get("result") == "ok":
+                        #     # Flash a success message
+                        #     # flash('Updated successfully!', 'success')
+                        # else:
+                        #     # Flash an error message
+                        #     flash(f"Error deleting old photo: {result.get('result')}", 'danger')
                     except Exception as e:
                         flash(f"Error deleting old photo: {str(e)}", 'danger')
 
@@ -92,14 +92,14 @@ def update():
                     # Call the update function in student_model
                     edit_form(secure_url)
                     # Flash a success message
-                    flash('Updated successfully!', 'success')
+                    # flash('Updated successfully!', 'success')
             else:
                 secure_url = None
 
                 # Call the update function in student_model
                 edit_form(secure_url)
                 # Flash a success message
-                flash('Updated successfully! No new photo.', 'success')
+                # flash('Updated successfully! No new photo.', 'success')
 
         except Exception as e:
             # Flash an error message
@@ -125,12 +125,12 @@ def delete():
                     result = destroy("ssis/" + public_id_val)
 
                     # Check the deletion result
-                    if result.get("result") == "ok":
-                        # Flash a success message
-                        flash('Updated successfully!', 'success')
-                    else:
-                        # Flash an error message
-                        flash(f"Error deleting old photo: {result.get('result')}", 'danger')
+                    # if result.get("result") == "ok":
+                    #     # Flash a success message
+                    #     flash('Updated successfully!', 'success')
+                    # else:
+                    #     # Flash an error message
+                    #     flash(f"Error deleting old photo: {result.get('result')}", 'danger')
                 except Exception as e:
                     flash(f"Error deleting old photo: {str(e)}", 'danger')
 
@@ -140,7 +140,7 @@ def delete():
                 # Call the delete function in student_model
                 delete_form()
                 # Flash a success message
-                flash('Deleted successfully!', 'success')
+                # flash('Deleted successfully!', 'success')
         except Exception as e:
             # Flash an error message
             flash(f'Delete failed: {str(e)}', 'danger')
