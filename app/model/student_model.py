@@ -17,7 +17,9 @@ def query_database():
     # Query the database
     if connection:
         try:
-            query = f"SELECT * FROM tblstudent"
+            
+            query = f"SELECT id, firstName, lastName, course, year, gender, photoUrl, CONCAT(tblcollege.name, ' ', '(', tblcourse.college, ')') AS college_name FROM tblstudent JOIN tblcourse ON tblstudent.course = tblcourse.code JOIN tblcollege ON tblcourse.college = tblcollege.code;"
+            
             cursor = connection.cursor(dictionary=True)
             cursor.execute(query)
             data = cursor.fetchall()
@@ -38,11 +40,13 @@ def queryfull_database(columns, keyword):
     connection = get_connection()
     if connection:
         try:
-            cursor = connection.cursor()
-            query = f"SELECT * FROM tblstudent WHERE "
+            cursor = connection.cursor()  
+            query = f"SELECT id, firstName, lastName, course, CONCAT(tblcollege.name, ' ', '(', tblcourse.college, ')') AS college_name, year, gender, photoUrl FROM tblstudent JOIN tblcourse ON tblstudent.course = tblcourse.code JOIN tblcollege ON tblcourse.college = tblcollege.code \
+                WHERE "
             for column in columns:
                 query += f"{column} LIKE '%{keyword}%' OR "
             query = query[:-4]  # Remove the last 'OR'
+            print("Generated SQL Query:", query)
             cursor.execute(query)
             result = cursor.fetchall()
             return result
@@ -107,10 +111,10 @@ def submit_form(secure_url=None):
         connection = get_connection()
 
         # Check if connection is successful
-        if connection:
-            flash('Connection successful!', 'success')
-        else:
-            flash('Connection failed!', 'danger')
+        # if connection:
+        #     flash('Connection successful!', 'success')
+        # else:
+        #     flash('Connection failed!', 'danger')
 
         try:
             with connection.cursor() as cursor:
@@ -121,12 +125,14 @@ def submit_form(secure_url=None):
                         student_query = "INSERT INTO tblstudent (id, firstName, lastName, course, year, gender, photoUrl) VALUES (%s, %s, %s, %s, %s, %s, %s)"
                         cursor.execute(student_query, (id, first_name, last_name, course, year, gender, secure_url))
                         # Flash a message
-                        flash(f'Inserted into tblstudent: {student_query % (id, first_name, last_name, course, year, gender, secure_url)}', 'info')
+                        # flash(f'Inserted into tblstudent: {student_query % (id, first_name, last_name, course, year, gender, secure_url)}', 'info')
+                        flash('Data inserted successfully!', 'success')
                     else:
                         flash(f'Student already exists: {id}', 'danger')
 
             # Commit the changes
             connection.commit()
+
 
         except Exception as e:
             # Flash an error message
@@ -160,23 +166,28 @@ def edit_form(secure_url=None):
         # Database connection
         connection = get_connection()
 
-        # Check if connection is successful
-        if connection:
-            flash('Connection successful!', 'success')
-        else:
-            flash('Connection failed!', 'danger')
+        # # Check if connection is successful
+        # if connection:
+        #     flash('Connection successful!', 'success')
+        # else:
+        #     flash('Connection failed!', 'danger')
 
         try:
             with connection.cursor(buffered=True) as cursor:
                     if photo_exists(id) and secure_url is None:
                         student_query = "UPDATE tblstudent SET firstName = %s, lastName = %s, course = %s, year = %s, gender = %s WHERE id = %s"
                         cursor.execute(student_query, (firstName, lastName, course, year, gender, id))
+
+                        flash('Data updated successfully!', 'success')
                     else:
                         student_query = "UPDATE tblstudent SET firstName = %s, lastName = %s, course = %s, year = %s, gender = %s, photoUrl = %s WHERE id = %s"
                         cursor.execute(student_query, (firstName, lastName, course, year, gender, secure_url, id))
 
+                        flash('Data updated successfully!', 'success')
+
             # Commit the changes
             connection.commit()
+
                 
         except Exception as e:
             # Flash an error message
@@ -205,11 +216,11 @@ def delete_form():
         # Database connection
         connection = get_connection()
 
-        # Check if connection is successful
-        if connection:
-            flash('Connection successful!', 'success')
-        else:
-            flash('Connection failed!', 'danger')
+        # # Check if connection is successful
+        # if connection:
+        #     flash('Connection successful!', 'success')
+        # else:
+        #     flash('Connection failed!', 'danger')
 
         try:
             with connection.cursor() as cursor:
@@ -217,11 +228,16 @@ def delete_form():
                     # Delete from tblstudent
                     student_query = "DELETE FROM tblstudent WHERE id = %s"
                     cursor.execute(student_query, (id,))
-                    # Flash a message
-                    flash(f'Deleted from tblstudent: {student_query % (id,)}', 'info')
+
+                    #Flash a message
+                    # flash('Data deleted successfully!', 'success')
 
             # Commit the changes
             connection.commit()
+
+            # Flash a message
+            # flash(f'Deleted from tblstudent: {student_query % (id,)}', 'info')
+            # flash('Data deleted successfully!', 'success')
 
         except Exception as e:
             # Flash an error message
@@ -238,7 +254,7 @@ def delete_form():
 def search_form(keyword):
     if request.method == 'POST':
         # Define columns for tblstudent
-        columns = ['id', 'firstName', 'lastName', 'course', 'year', 'gender']
+        columns = ['id', 'firstName', 'lastName', 'course', 'year', 'gender', "CONCAT(tblcollege.name, ' ', '(', tblcourse.college, ')')"]
     
         # Perform the search
         result = queryfull_database(columns, keyword)

@@ -6,20 +6,20 @@
                 {% for row in data %}
                     <tr>
                         <td>
-                            {% if row[6] %}
-                            <img src="{{ row[6] }}" class="img-fluid" width="80" height="80">
+                            {% if row[7] %}
+                            <img src="{{ row[7] }}" class="img-fluid" width="80" height="80">
                             {% else %}
                             <img src="https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg" class="img-fluid" width="80" height="80">
                             {% endif %}
                         </td>
                         {% for value in row %}
-                            {% if not loop.last %}
-                                <td>{{ value }}</td>
+                            {% if not loop.index == 8 %}
+                            <td>{{ value }}</td>
                             {% endif %}
                         {% endfor %}
                         <td>
                             <button class="btn btn-primary photo-btn" data-bs-toggle="modal" data-bs-target="#studentPhotoModal"
-                                data-student-photo="{{ row[6] }}">
+                                data-student-photo="{{ row[7] }}">
                                 <i class="fa fa-eye"></i> | View
                             </button>
                         </td>
@@ -27,9 +27,9 @@
                             <button class="btn btn-warning edit-btn" data-bs-toggle="modal" data-bs-target="#studentEditModal"
                             data-student-id="{{ row[0] }}" data-student-firstname="{{ row[1] }}"
                             data-student-lastname="{{ row[2] }}" data-student-course="{{ row[3] }}"
-                            data-student-year="{{ row[4] }}" data-student-gender="{{ row[5] }}" data-student-photo="{{ row[6] }}">
+                            data-student-year="{{ row[5] }}" data-student-gender="{{ row[6] }}" data-student-photo="{{ row[7] }}">
                             <i class="fa fa-pencil"></i> | Edit</button>
-                            <button class="btn btn-danger delete-btn" data-student-id="{{ row[0] }}" data-student-photo="{{ row[6] }}"><i class="fa fa-trash"></i> | Delete</button>
+                            <button class="btn btn-danger delete-btn" data-student-id="{{ row[0] }}" data-student-photo="{{ row[7] }}"><i class="fa fa-trash"></i> | Delete</button>
                         </td>
                     </tr>
                 {% endfor %}

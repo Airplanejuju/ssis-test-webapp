@@ -62,6 +62,25 @@
             // Optionally, clear the file input
             $(this).val('');
         }
+
+        var fileInput = document.getElementById('photo');
+
+        // Check if any file is selected
+        if (fileInput.files.length > 0) {
+            // Get the selected file
+            var selectedFile = fileInput.files[0];
+
+            // Check the file type
+            if (selectedFile.type.startsWith('image/')) {
+                // It's a valid image type
+                console.log('Valid image type!');
+            } else {
+                // It's not a valid image type
+                alert('Please select a valid image file.');
+                // You can optionally clear the file input to prevent submitting the invalid file
+                fileInput.value = '';
+            }
+        }
     });
 });
 </script>

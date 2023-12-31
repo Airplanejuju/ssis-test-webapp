@@ -2,6 +2,7 @@
     {% extends "layout.html" %}
     {% block content %}
 
+    <br>
     {% with messages = get_flashed_messages(with_categories=true) %}
     {% if messages %}
         {% for category, message in messages %}
@@ -37,6 +38,7 @@
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Course</th>
+                        <th>College Name</th>
                         <th>Year</th>
                         <th>Gender</th>
                         <th>Picture</th>
@@ -58,6 +60,7 @@
                                 <td>{{ student.firstName }}</td>
                                 <td>{{ student.lastName }}</td>
                                 <td>{{ student.course }}</td>
+                                <td>{{ student.college_name }}</td>
                                 <td>{{ student.year }}</td>
                                 <td>{{ student.gender }}</td>
                                 <td>
